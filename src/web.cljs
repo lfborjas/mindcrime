@@ -1,8 +1,9 @@
 ;based on http://gist.github.com/1172019
 
 (ns mindcrime
-  (:require 
-    [cljs.nodejs :as node]))
+  (:require
+    [cljs.nodejs :as node]
+    [clojure.string :as string]))
 
 (def express (node/require "express"))
 (def fs      (node/require "fs"))
@@ -33,7 +34,9 @@
     [(step-in          [ x ] (do (println x) x))
 
      (read-slides      [from-file] (slurp from-file))
-     (split-slides     [raw-markup] (re-seq #"!SLIDE (\w+)?[\n\r](.|\n|\r|\s)*" raw-markup))
+     (split-slides     [raw-markup] 
+       (concat (map (fn [slide-content] (re-seq #"\s*(html|markdown)?([\s\S])+" slide-content))
+                    (string/split raw-markup #"!SLIDE"))))
      (build-slides     [slide-components] (map (fn [[_ t mkp]] {:type (or t "markdown"), :content mkp}) slide-components))
      (render-slide     [{typ :type mkp :content}] (render (str typ "_slide") {:content  mkp}))
      (rendered-slides  [slide-maps] (map render-slide slide-maps))
