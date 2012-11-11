@@ -1,6 +1,8 @@
 {
   "dependencies": {
-    "express": "3.x"
+    "express": "3.x",
+		"consolidate": "0.5.x",
+		"handlebars": "1.0.7"
   },
   "engines": {
     "npm": "1.1.x",
