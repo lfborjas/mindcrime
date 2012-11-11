@@ -12,8 +12,11 @@ clojurescript.
 
 #Usage
 
-Create a `_templates` folder, write your `slides.md` there,
+Write your slides in a `slides.md` file,
 `foreman start`, `open localhost:5000` and boom.
 
+#Development
+
 If you add custom code to `src`, make sure to `make js` to compile to
-javascript.
+javascript or `make dev` to fire a process that will watch the `src`
+folder and re-compile when anything changes. 
