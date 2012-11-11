@@ -35,14 +35,13 @@
 
      (read-slides      [from-file] (slurp from-file))
      (split-slides     [raw-markup] (remove #(string/blank? %) (string/split raw-markup #"!SLIDE")))
-     (render-slide     [mkp] (render "markdown_slide" {:content  mkp}))
-     (rendered-slides  [slide-maps] (map render-slide slide-maps))
+     (render-slides    [raw-slides] (map #(render "markdown_slide" {:content %}) raw-slides))
      (render-slideshow [slides] (render "index" {:slides slides}))]
     (-> 
       from-filename
       read-slides
       split-slides
-      rendered-slides
+      render-slides
       render-slideshow)))
 
 (defn create-slideshow [request response]
