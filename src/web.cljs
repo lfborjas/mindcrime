@@ -44,7 +44,6 @@
       split-slides
       build-slides
       rendered-slides
-      step-in
       render-slideshow)))
 
 (defn create-slideshow [request response]
@@ -55,6 +54,10 @@
     (doto app
       ;configuration
       (.use (. express (logger)))
+
+      ;workaround for "static" being a reserved word
+      ;https://groups.google.com/forum/?fromgroups=#!topic/clojure/o3oENTFai3U
+      (.use (js* "mindcrime.express['static']('./public')"))
 
       ;view rendering: didn't work, keeps whining about a callback!
       ;(.engine "html" (.-handlebars engines))
