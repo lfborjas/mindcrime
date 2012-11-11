@@ -34,19 +34,14 @@
     [(step-in          [ x ] (do (println x) x))
 
      (read-slides      [from-file] (slurp from-file))
-     (split-slides     [raw-markup] 
-       (concat (map (fn [slide-content] (re-seq #"\s*(html|markdown)?([\s\S])+" slide-content))
-                    (string/split raw-markup #"!SLIDE"))))
-     (build-slides     [slide-components] (map (fn [[_ t mkp]] {:type (or t "markdown"), :content mkp}) slide-components))
-     (render-slide     [{typ :type mkp :content}] (render (str typ "_slide") {:content  mkp}))
+     (split-slides     [raw-markup] (remove #(string/blank? %) (string/split raw-markup #"!SLIDE")))
+     (render-slide     [mkp] (render "markdown_slide" {:content  mkp}))
      (rendered-slides  [slide-maps] (map render-slide slide-maps))
      (render-slideshow [slides] (render "index" {:slides slides}))]
     (-> 
       from-filename
       read-slides
       split-slides
-      step-in
-      build-slides
       rendered-slides
       render-slideshow)))
 
